@@ -7,14 +7,15 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-
 apply plugin: 'net.minecraftforge.gradle'
 
 version = '1.0'
 group = 'client'
 archivesBaseName = 'VilonExtended'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(8)
+}
 
 minecraft {
     mappings channel: 'official', version: '1.16.5'
