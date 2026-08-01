@@ -1,0 +1,11 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="All rights reserved"
+
+[[mods]]
+modId="vilonextended"
+version="1.0"
+displayName="Vilon Extended"
+credits="You"
+authors="You"
+description="Dark fantasy client with mock on kill"
