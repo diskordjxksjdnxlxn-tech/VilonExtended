@@ -1,41 +1,64 @@
-plugins {
-    id 'net.minecraftforge.gradle' version '6.0.25'
-}
+ client.manager;
 
-version = '1.0'
-group = 'client'
-archivesBaseName = 'VilonExtended'
+ net.minecraft.client.Minecraft;
+ net.minecraft.util.text.StringTextComponent;
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+ java.io.BufferedReader;
+ java.io.FileReader;
+ java.io.IOException;
+ java.util.ArrayList;
+ java.util.List;
 
-minecraft {
-    mappings channel: 'official', version: '1.16.5'
-    runs {
-        client {
-            property 'forge.logging.mojang_level', 'debug'
-            mods {
-                vilonextended {
-                    source sourceSets.main
-                }
+ AltManager {
+    List<Account> accounts =  ArrayList<>();
+    currentIndex = 0;
+
+    loadAlts(String filePath)  IOException {
+        BufferedReader reader = ne BufferedReader(ne FileReader(filePath));
+        String line;
+        whil ((line = reader.readLine()) != null) {
+            String[] parts = line.split(":");
+            i (parts.length >= 2) {
+                accounts.add(ne Account(parts[0], parts[1]));
             }
         }
+        reader.close();
+        System.out.println("[AltManager] Загружено " + accounts.size() + " аккаунтов.");
     }
-}
 
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
-}
+    publi autoLogin() {
+        i (accounts.isEmpty()) {
+            System.out.println("[AltManager] Список аккаунтов пуст.");
+            retur
+        }
+        Account acc = accounts.get(currentIndex);
+        i (Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.sendMessage(
+                ne StringTextComponent("/login " + acc.password),
+                Minecraft.getInstance().player.getUUID()
+            );
+            System.out.println("[AltManager] Авторизация для: " + acc.username);
+        }
+    }
 
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": "VilonExtended",
-            "Specification-Vendor": "client",
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": project.version,
-            "Implementation-Vendor": "client",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
+     switchToNext() {
+        i (accounts.isEmpty()) 
+        currentIndex = (currentIndex + 1) % accounts.size();
+        System.out.println("[AltManager] Переключено на: " + accounts.get(currentIndex).username);
+    }
+
+    publi Account getCurrentAccount() {
+        i (accounts.isEmpty()) retur null;
+        retur accounts.get(currentIndex);
+    }
+
+    publi stati clas Account {
+        publi String username;
+        publi String password;
+
+        publi Account(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
     }
 }
